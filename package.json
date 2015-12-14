@@ -20,6 +20,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "async": "^1.5.0",
     "body-parser": "^1.14.1",
     "compression": "^1.6.0",
     "consolidate": "latest",
@@ -32,11 +33,13 @@
     "fluent-ffmpeg": "1.5.2",
     "formidable": "1.0.14",
     "gm": "1.13.3",
+    "handlebars": "^4.0.5",
     "helmet": "0.1.1",
     "imagemagick": "latest",
     "mongodb": "latest",
     "mongoose": "latest",
     "morgan": "^1.6.1",
+    "ncp": "^2.0.0",
     "node-twitter-api": "1.1.1",
     "nodemailer": "0.5.7",
     "social-share": "latest",
