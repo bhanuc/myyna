@@ -1,5 +1,8 @@
 ![Myyna, pintrest clone](http://www.myyna.com/wp-content/uploads/2014/02/band_logo11.png)
 
+Forked from https://github.com/cubettech/myyna
+Updated Modules and small fixes added. 
+
 #Install Node.js version 0.8 or above (stable version preferred)
 
 ###Mac

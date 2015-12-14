@@ -8,11 +8,11 @@
   ],
   "author": "Cubet Techno Labs, Cochin <info@cubettech.com>",
   "description": "Pinterest clone script using node.js",
-  "contributors": [ 
+  "contributors": [
     {
       "name": "Robin C Samuel",
       "email": "robin@cubettech.com"
-    } 
+    }
   ],
   "version": "0.0.1",
   "private": true,
@@ -20,25 +20,29 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "body-parser": "^1.14.1",
+    "compression": "^1.6.0",
+    "consolidate": "latest",
+    "errorhandler": "^1.4.2",
     "express": "latest",
-    "handlebars": "latest",
+    "express-handlebars": "^2.0.1",
+    "express-session": "^1.12.1",
+    "facebook-js": "1.0.1",
+    "facebook-node-sdk": "0.2.0",
+    "fluent-ffmpeg": "1.5.2",
+    "formidable": "1.0.14",
+    "gm": "1.13.3",
+    "helmet": "0.1.1",
+    "imagemagick": "latest",
     "mongodb": "latest",
     "mongoose": "latest",
-    "consolidate": "latest",
-    "express3-handlebars": "latest",
-    "webshot": "latest",
-    "imagemagick": "latest",
-    "socket.io": "0.9.16",
-    "formidable": "1.0.14",
-    "fluent-ffmpeg": "1.5.2",
+    "morgan": "^1.6.1",
+    "node-twitter-api": "1.1.1",
     "nodemailer": "0.5.7",
-    "youtube-feeds":"2.2.1",
-    "gm":"1.13.3",
-    "facebook-js":"1.0.1",
-    "facebook-node-sdk":"0.2.0",
-    "node-twitter-api":"1.1.1",    
-    "social-share":"latest",
-    "helmet":"0.1.1"
+    "social-share": "latest",
+    "socket.io": "0.9.16",
+    "webshot": "latest",
+    "youtube-feeds": "2.2.1"
   },
   "license": "MIT"
 }

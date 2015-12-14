@@ -35,43 +35,46 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var exphbs  = require('express3-handlebars');
-var helmet  = require('helmet');
+var exphbs  = require('express-handlebars');
+var helmet = require('helmet');
 var fs = require('fs');
-var hbs = require('handlebars');
 var engines = require('consolidate');
 var io = require('socket.io');
-global.app = express();
+var app = global.app = express();
+var morgan = require('morgan');
+var bodyParser = require('body-parser');
+var compression = require('compression');
+var session = require('express-session');
+var errorhandler = require('errorhandler');
+var hbs = exphbs.create({
+    defaultLayout: 'default',
+    layoutsDir: path.join(__dirname, 'application/layouts/'),
+    extname: ".html"
+});
 
 global.sleekConfig = {};
-require(path.join(__dirname,'application/config/config.js'));
-app.configure(function(){
-    app.set('env', sleekConfig.env);
-    // all environments
-    app.set('port', process.env.PORT || sleekConfig.appPort);
-    app.set('host', sleekConfig.appHost ? sleekConfig.appHost : 'localhost');
-    app.set('views', path.join(__dirname, 'application/views'));
-    app.set('view engine', 'handlebars');
-    app.engine('html',  exphbs({defaultLayout: 'default',
-                                layoutsDir: path.join(__dirname, 'application/layouts/'), extname:".html"})
-                ); 
-    app.use(express.favicon(path.join(__dirname, 'public/favicon.ico'))); 
-    app.use(express.logger('dev'));
-    app.use(express.json());
-    app.use(express.urlencoded());  
-    app.use(helmet.xframe());
-    app.use(helmet.iexss());
-    app.use(helmet.contentTypeOptions());
-    app.use(helmet.cacheControl());
-    app.use(express.methodOverride());
-    app.use(express.cookieParser('CubEtNoDeSlEek'));
-    app.use(express.session());
-    app.use(express.static(path.join(__dirname, 'public')));
-    app.use(express.static(path.join(__dirname, 'uploads')));
-    app.set('strict routing');
+require(path.join(__dirname, 'application/config/config.js'));
+app.set('env', sleekConfig.env);
+// all environments
+app.set('port', process.env.PORT || sleekConfig.appPort);
+app.set('host', sleekConfig.appHost ? sleekConfig.appHost : 'localhost');
+app.set('views', path.join(__dirname, 'application/views'));
 
-    
-});
+app.engine('handlebars', hbs.engine);
+app.set('view engine', 'handlebars');
+app.use(morgan('combined'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(helmet.xframe());
+app.use(helmet.iexss());
+app.use(helmet.contentTypeOptions());
+app.use(helmet.cacheControl());
+app.use(compression());
+app.use(session({ secret: 'super_secret', cookie: { maxAge: 60000 }}))
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'uploads')));
+app.set('strict routing');
+
 
 //set Site url
 //global.sleekConfig.siteUrl = app.get('host')+':'+app.get('port');
@@ -81,27 +84,30 @@ var cur_directory = path.join(__dirname, '');
 fs.exists(sFolderPath, function(exists) {
     if (!exists)
         require('./system/core/sleek.js')(app);
-    else
-    {
-        require('./system/install/route.js')(app,sFolderPath,cur_directory);
+    else {
+        require('./system/install/route.js')(app, sFolderPath, cur_directory);
     }
 });
 // development only
 if ('development' == app.get('env')) {
-    app.use(express.errorHandler());
-} else {
+    app.use(errorhandler());
+}
+else {
     //prevent crash
-    process.on('uncaughtException', function (exception) {
+    process.on('uncaughtException', function(exception) {
         console.log(exception);
     });
 }
 
 var server = http.createServer(app);
 try {
-    global.sio = io.listen(server, {log: false});
-    server.listen(app.get('port'), function(){
-      console.log('application running at ' + sleekConfig.siteUrl);
+    global.sio = io.listen(server, {
+        log: false
     });
-} catch (e) {
+    server.listen(app.get('port'), function() {
+        console.log('application running at ' + sleekConfig.siteUrl);
+    });
+}
+catch (e) {
     system.log(e);
 }
